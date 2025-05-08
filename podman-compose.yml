@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pyquote-pod
+spec:
+  containers:
+    - name: pyquote-db
+      image: postgres
+      ports:
+        - containerPort: 5432
+      env:
+        - name: POSTGRES_USER
+          value: "quoteuser"
+        - name: POSTGRES_PASSWORD
+          value: "quotepass"
+        - name: POSTGRES_DB
+          value: "quotes"
+      volumeMounts:
+        - mountPath: /docker-entrypoint-initdb.d/init.sql
+          name: init-script
+
+    - name: pyquote-app
+      image: localhost/pyquote
+      ports:
+        - containerPort: 5000
+      env:
+        - name: DB_HOST
+          value: "localhost"
+      command: ["python", "app.py"]
+
+  volumes:
+    - name: init-script
+      hostPath:
+        path: ./init.sql
+        type: File

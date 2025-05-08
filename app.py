@@ -1,26 +1,26 @@
+# app.py
+# This Flask app connects to a PostgreSQL database container and serves a random sci-fi quote.
+
 from flask import Flask
-import random
+import psycopg2
 
 app = Flask(__name__)
 
-quotes = [
-    ("Albert Einstein", "Life is like riding a bicycle. To keep your balance you must keep moving."),
-    ("Abraham Lincoln", "Whatever you are, be a good one."),
-    ("Mahatma Gandhi", "Be the change that you wish to see in the world."),
-    ("Winston Churchill", "Success is not final, failure is not fatal: It is the courage to continue that counts."),
-    ("Marie Curie", "Nothing in life is to be feared, it is only to be understood."),
-    ("Leonardo da Vinci", "Learning never exhausts the mind."),
-    ("George Washington", "It is better to offer no excuse than a bad one."),
-    ("Theodore Roosevelt", "Believe you can and you're halfway there."),
-    ("Confucius", "It does not matter how slowly you go as long as you do not stop."),
-    ("Socrates", "The only true wisdom is in knowing you know nothing.")
-]
+# Connect to the PostgreSQL database (running in another container)
+conn = psycopg2.connect(
+    host='quotes-db',       # Replace with the hostname or IP of the DB container
+    dbname='quotes',
+    user='quoteuser',
+    password='quotepass'
+)
 
 @app.route('/')
 def quote():
-    author, quote = random.choice(quotes)
+    cur = conn.cursor()
+    cur.execute("SELECT author, quote FROM quotes ORDER BY RANDOM() LIMIT 1;")
+    author, quote = cur.fetchone()
+    cur.close()
     return f'<h1>{quote}</h1><p>- {author}</p>'
 
 if __name__ == '__main__':
-    # Disable debug mode to avoid _multiprocessing import error in some environments
-    app.run(debug=False)
+    app.run(host='0.0.0.0', debug=True)
