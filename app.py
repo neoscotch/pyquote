@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # Connect to the PostgreSQL database (running in another container)
 conn = psycopg2.connect(
-    host='quotes-db',       # Replace with the hostname or IP of the DB container
+    host='localhost',       # Replace with the hostname or IP of the DB container
     dbname='quotes',
     user='quoteuser',
     password='quotepass'
