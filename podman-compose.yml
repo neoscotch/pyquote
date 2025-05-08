@@ -16,7 +16,7 @@ spec:
         - name: POSTGRES_DB
           value: "quotes"
       volumeMounts:
-        - mountPath: /docker-entrypoint-initdb.d/init.sql
+        - mountPath: /docker-entrypoint-initdb.d
           name: init-script
 
     - name: pyquote-app
@@ -33,4 +33,3 @@ spec:
     hostPath:
       path: ./init.sql
       type: File
-    selinuxRelabel: false
