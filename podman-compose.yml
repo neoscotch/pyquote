@@ -5,15 +5,15 @@ metadata:
 spec:
   containers:
     - name: pyquote-db
-      image: registry.redhat.io/rhel8/postgresql-12
+      image: docker.io/library/postgres:latest
       ports:
         - containerPort: 5432
       env:
-        - name: POSTGRESQL_USER
+        - name: POSTGRES_USER
           value: "quoteuser"
-        - name: POSTGRESQL_PASSWORD
+        - name: POSTGRES_PASSWORD
           value: "quotepass"
-        - name: POSTGRESQL_DATABASE
+        - name: POSTGRES_DB
           value: "quotes"
       volumeMounts:
         - mountPath: /docker-entrypoint-initdb.d/init.sql
