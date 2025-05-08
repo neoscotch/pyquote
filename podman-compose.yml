@@ -29,7 +29,8 @@ spec:
       command: ["python", "app.py"]
 
   volumes:
-    - name: init-script
-      hostPath:
-        path: ./init.sql
-        type: File
+  - name: init-script
+    hostPath:
+      path: ./init.sql
+      type: File
+    selinuxRelabel: false
