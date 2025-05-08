@@ -20,7 +20,7 @@ spec:
           name: init-script
 
     - name: pyquote-app
-      image: localhost/pyquote
+      image: pyquote:latest
       ports:
         - containerPort: 5000
       env:
